@@ -206,6 +206,7 @@ const getAllCategories = async (
     Object.assign(pagination.value, params);
 
     const requestUrl = `categories?${pagination.value.queryString}`;
+    console.log('requet',requestUrl);
     const response = await CategoryService.getAll(requestUrl);
 
     console.log("API Response brut:", response.data);
@@ -256,6 +257,7 @@ const getAllCategories = async (
     selectedCategory,
   };
 });
+
 
 
 
