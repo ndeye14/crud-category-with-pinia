@@ -69,7 +69,7 @@
                                             <td>{{ (currentPage - 1) * itemsPerPage + index
                                                 + 1 }}</td>
                                             <td>{{ item.name }}</td>
-                                            <td>{{ item.description}}</td>
+                                            <td>{{ item}}</td>
                                             <td>{{ formatDate(item.createdAt) }}</td>
                                             <td>
                                                 <button type="button" class="btn btn-success btn-sm px-2 me-2"
@@ -437,4 +437,5 @@ table th {
 background-color: red;
 }
 </style>
+
 
