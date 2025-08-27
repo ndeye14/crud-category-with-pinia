@@ -207,7 +207,7 @@ export const useCategoryStore = defineStore("category", () => {
     const requestUrl = `categories?${pagination.value.queryString}`;
     const response = await CategoryService.getAll(requestUrl);
 
-    console.log("API Response brut:", response.data);
+    console.log("API Response brut:", response.data.member);
 
     // Vérification du format Hydra
     if (!response.data || !Array.isArray(response.data.member)) {
@@ -244,5 +244,6 @@ export const useCategoryStore = defineStore("category", () => {
     selectedCategory,
   };
 });
+
 
 
