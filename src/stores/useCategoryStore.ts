@@ -190,7 +190,7 @@ export const useCategoryStore = defineStore("category", () => {
 //   }
 // };
 
-  const getAllCategories = async (
+const getAllCategories = async (
   params: {
     filters?: Record<string, string>;
     sortField?: string;
@@ -207,28 +207,39 @@ export const useCategoryStore = defineStore("category", () => {
     const requestUrl = `categories?${pagination.value.queryString}`;
     const response = await CategoryService.getAll(requestUrl);
 
-    console.log("API Response brut:", response.data.member);
+    console.log("API Response brut:", response.data);
 
-    // Vérification du format Hydra
-    if (!response.data || !Array.isArray(response.data.member)) {
-      throw new Error("Réponse API invalide : format Hydra attendu");
+    let items: any[] = [];
+    let total = 0;
+
+    // 🔹 Cas 1: API retourne un tableau brut
+    if (Array.isArray(response.data)) {
+      items = response.data;
+      total = response.data.length;
+    }
+    // 🔹 Cas 2: API retourne un objet Hydra/JSON:API
+    else if (response.data.member || response.data["hydra:member"]) {
+      items = response.data.member || response.data["hydra:member"];
+      total =
+        response.data.totalItems ||
+        response.data["hydra:totalItems"] ||
+        items.length;
+    } else {
+      throw new Error("Format de réponse non supporté");
     }
 
-    // Mise à jour des catégories
-    pagination.value.setItems(formatCategoryData(response.data.member));
-
-    // Nombre total d’items
-    pagination.value.setTotalItems(
-      response.data.totalItems || response.data.member.length
-    );
+    // Mise à jour pagination
+    pagination.value.setItems(formatCategoryData(items));
+    pagination.value.setTotalItems(total);
 
     console.log("Pagination mise à jour:", pagination.value);
   } catch (error) {
-    console.error("Erreur dans getAllCategories:", error);
     setError(error);
+    console.error("Erreur dans getAllCategories:", error);
     throw error;
   }
 };
+
 
 
   
@@ -244,6 +255,7 @@ export const useCategoryStore = defineStore("category", () => {
     selectedCategory,
   };
 });
+
 
 
 
