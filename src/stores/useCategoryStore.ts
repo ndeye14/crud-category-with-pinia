@@ -204,9 +204,27 @@ const getAllCategories = async (
 ) => {
   try {
     Object.assign(pagination.value, params);
+    // Reconstruire le queryString à partir des paramètres
+    const queryParams = new URLSearchParams();
+    if (pagination.value.currentPage) {
+        queryParams.append('page', pagination.value.currentPage);
+    }
+    if (pagination.value.itemsPerPage) {
+        queryParams.append('itemsPerPage', pagination.value.itemsPerPage);
+    }
+    if (pagination.value.sortField && pagination.value.sortOrder) {
+        queryParams.append('sort', `${pagination.value.sortField},${pagination.value.sortOrder}`);
+    }
+    if (pagination.value.searchQuery) {
+        queryParams.append('search', pagination.value.searchQuery);
+    }
+    // Ajoutez ici d'autres filtres si nécessaire
 
-    const requestUrl = `categories?${pagination.value.queryString}`;
-    console.log('requet',requestUrl);
+    const requestUrl = `categories?${queryParams.toString()}`;
+    console.log('requet', requestUrl);
+
+    // const requestUrl = `categories?${pagination.value.queryString}`;
+    // console.log('requet',requestUrl);
     const response = await CategoryService.getAll(requestUrl);
 
     console.log("API Response brut:", response.data);
@@ -257,6 +275,7 @@ const getAllCategories = async (
     selectedCategory,
   };
 });
+
 
 
 
