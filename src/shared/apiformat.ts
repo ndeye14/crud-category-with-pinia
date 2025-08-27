@@ -58,8 +58,8 @@ export const formatItem = (item: any): Category => {
     id: item.id,
     name: item.name || "Untitled",
     description: item.description || "Untitled",
-    created_at: item.created_at || "Untitled",
-    updated_at: item.updated_at || "Untitled",
+    created_at: item.created_at || item.createdAt || "Untitled",
+    updated_at: item.updated_at || item.updatedAt || "Untitled",
   };
 };
 
@@ -91,6 +91,7 @@ export const formatCategoryData = (response: any): Category[] => {
 
   throw new Error("Invalid response format");
 };
+
 
 
 
