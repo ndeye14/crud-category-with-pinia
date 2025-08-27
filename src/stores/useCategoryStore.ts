@@ -62,8 +62,8 @@ export const useCategoryStore = defineStore("category", () => {
       const response = await CategoryService.getById(`categories/${id}`);
       console.log('lieu',response.data);
       console.log(response.data.data);
-      console.log(formatItem(response.data.data));
-      return formatItem(response.data.data);
+      console.log(formatItem(response.data));
+      return formatItem(response.data);
     } catch (error) {
       setError(error);
       throw error;
@@ -256,6 +256,7 @@ const getAllCategories = async (
     selectedCategory,
   };
 });
+
 
 
 
