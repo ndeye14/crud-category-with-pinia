@@ -23,12 +23,13 @@ export const formatCategoryData = (response: any): Category[] => {
 
   return dataArray.map(formatItem);
 };
-// export function formatCategoryData(data: any[]): Category[] {
-//   return data.data.map((item) => ({
-//     id: item.id,
-//     name: item.name,
-//     description: item.description,
-//     created_at: item.created_at,
-//     updated_at: item.updated_at,
-//   }));
-// }
+export function formatCategoryData(data: any[]): Category[] {
+  return data.data.map((item) => ({
+    id: item.id,
+    name: item.name,
+    description: item.description,
+    created_at: item.created_at,
+    updated_at: item.updated_at,
+  }));
+}
+
