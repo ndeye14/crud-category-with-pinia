@@ -156,7 +156,41 @@ export const useCategoryStore = defineStore("category", () => {
   //     throw error;
   //   }
   // };
- const getAllCategories = async (
+//  const getAllCategories = async (
+//   params: {
+//     filters?: Record<string, string>;
+//     sortField?: string;
+//     sortOrder?: string;
+//     itemsPerPage?: number;
+//     currentPage?: number;
+//     searchField?: string;
+//     searchQuery?: string;
+//   } = {}
+// ) => {
+//   try {
+//     Object.assign(pagination.value, params);
+
+//     const requestUrl = `categories?${pagination.value.queryString}`;
+//     const response = await CategoryService.getAll(requestUrl);
+
+//     console.log("Hydra API response:", response.data);
+
+//     // Les catégories sont dans response.data.member
+//     pagination.value.setItems(formatCategoryData(response.data.member));
+
+//     // Le total est dans response.data.totalItems
+//     pagination.value.setTotalItems(
+//       response.data.totalItems || response.data.member.length
+//     );
+
+//     console.log(pagination.value);
+//   } catch (error) {
+//     setError(error);
+//     throw error;
+//   }
+// };
+
+  const getAllCategories = async (
   params: {
     filters?: Record<string, string>;
     sortField?: string;
@@ -173,22 +207,29 @@ export const useCategoryStore = defineStore("category", () => {
     const requestUrl = `categories?${pagination.value.queryString}`;
     const response = await CategoryService.getAll(requestUrl);
 
-    console.log("Hydra API response:", response.data);
+    console.log("API Response brut:", response.data);
 
-    // Les catégories sont dans response.data.member
+    // Vérification du format Hydra
+    if (!response.data || !Array.isArray(response.data.member)) {
+      throw new Error("Réponse API invalide : format Hydra attendu");
+    }
+
+    // Mise à jour des catégories
     pagination.value.setItems(formatCategoryData(response.data.member));
 
-    // Le total est dans response.data.totalItems
+    // Nombre total d’items
     pagination.value.setTotalItems(
       response.data.totalItems || response.data.member.length
     );
 
-    console.log(pagination.value);
+    console.log("Pagination mise à jour:", pagination.value);
   } catch (error) {
+    console.error("Erreur dans getAllCategories:", error);
     setError(error);
     throw error;
   }
 };
+
 
   
 
@@ -203,4 +244,5 @@ export const useCategoryStore = defineStore("category", () => {
     selectedCategory,
   };
 });
+
 
