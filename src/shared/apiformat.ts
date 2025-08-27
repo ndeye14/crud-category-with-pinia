@@ -35,17 +35,31 @@
 
 import type { Category } from "@/stores/useCategoryStore";
 
+// export const formatItem = (item: any): Category => {
+//   if (!item || (!item.id && !item["@id"])) {
+//     throw new Error("Invalid item format");
+//   }
+
+//   return {
+//     id: item.id ?? item["@id"] ?? null,
+//     name: item.name || "Untitled",
+//     description: item.description || "",
+//     created_at: item.created_at || item.createdAt || null,
+//     updated_at: item.updated_at || item.updatedAt || null,
+//   };
+// };
+
 export const formatItem = (item: any): Category => {
-  if (!item || (!item.id && !item["@id"])) {
+  if (!item ) {
     throw new Error("Invalid item format");
   }
 
   return {
-    id: item.id ?? item["@id"] ?? null,
+    id: item.id,
     name: item.name || "Untitled",
-    description: item.description || "",
-    created_at: item.created_at || item.createdAt || null,
-    updated_at: item.updated_at || item.updatedAt || null,
+    description: item.description || "Untitled",
+    created_at: item.created_at || "Untitled",
+    updated_at: item.updated_at || "Untitled",
   };
 };
 
@@ -77,6 +91,7 @@ export const formatCategoryData = (response: any): Category[] => {
 
   throw new Error("Invalid response format");
 };
+
 
 
 
