@@ -69,8 +69,8 @@
                                             <td>{{ (currentPage - 1) * itemsPerPage + index
                                                 + 1 }}</td>
                                             <td>{{ item.name }}</td>
-                                            <td>{{ item}}</td>
-                                            <td>{{ formatDate(item.createdAt) }}</td>
+                                            <td>{{ item.description}}</td>
+                                            <td>{{ formatDate(item.created_at) }}</td>
                                             <td>
                                                 <button type="button" class="btn btn-success btn-sm px-2 me-2"
                                                     @click="categoryStore.showCategoryDetails(item.id)"
@@ -437,5 +437,6 @@ table th {
 background-color: red;
 }
 </style>
+
 
 
