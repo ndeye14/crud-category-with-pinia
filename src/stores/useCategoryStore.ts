@@ -60,6 +60,7 @@ export const useCategoryStore = defineStore("category", () => {
   const getCategoryById = async (id: string) => {
     try {
       const response = await CategoryService.getById(`categories/${id}`);
+      console.log('lieu',response.data);
       console.log(response.data.data);
       console.log(formatItem(response.data.data));
       return formatItem(response.data.data);
@@ -215,7 +216,7 @@ const getAllCategories = async (
     // 🔹 Cas 1: API retourne un tableau brut
     if (Array.isArray(response.data)) {
       items = response.data;
-      total = response.data.length;
+      total = response.data.totalItems;
     }
     // 🔹 Cas 2: API retourne un objet Hydra/JSON:API
     else if (response.data.member || response.data["hydra:member"]) {
@@ -255,6 +256,7 @@ const getAllCategories = async (
     selectedCategory,
   };
 });
+
 
 
 
