@@ -14,12 +14,27 @@ class CategoryService {
   }
   
 
-  public static async post(
-    resource: string,
-    params: any
-  ): Promise<AxiosResponse> {
-    return CategoryService.vueInstance.axios.post(`${resource}`, params, {});
-  }
+  // public static async post(
+  //   resource: string,
+  //   params: any
+  // ): Promise<AxiosResponse> {
+  //   return CategoryService.vueInstance.axios.post(`${resource}`, params, {});
+  // }
+  // CategoryService.ts
+
+public static async post(
+  resource: string,
+  params: any
+): Promise<AxiosResponse> {
+  // Ajoutez l'en-tête Content-Type pour que le serveur accepte la requête
+  const config = {
+    headers: {
+      'Content-Type': 'application/ld+json',
+    },
+  };
+
+  return CategoryService.vueInstance.axios.post(`${resource}`, params, config);
+}
   public static async update(
     resource: string,
     slug: string,
@@ -55,3 +70,4 @@ class CategoryService {
 }
 
 export default CategoryService;
+
