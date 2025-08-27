@@ -110,53 +110,86 @@ export const useCategoryStore = defineStore("category", () => {
     }
   };
 
-  const getAllCategories = async (
-    params: {
-      filters?: Record<string, string>;
-      sortField?: string;
-      sortOrder?: string;
-      itemsPerPage?: number;
-      currentPage?: number;
-      searchField?: string;
-      searchQuery?: string;
-    } = {}
-  ) => {
-    try {
-      // Mise à jour des paramètres de pagination.value selon les arguments passés
-      // Cette ligne fusionne les paramètres passés (params) avec les valeurs actuelles de pagination.value
-      // Cela permet de mettre à jour plusieurs paramètres de pagination en une seule fois
-      Object.assign(pagination.value, params);
+  // const getAllCategories = async (
+  //   params: {
+  //     filters?: Record<string, string>;
+  //     sortField?: string;
+  //     sortOrder?: string;
+  //     itemsPerPage?: number;
+  //     currentPage?: number;
+  //     searchField?: string;
+  //     searchQuery?: string;
+  //   } = {}
+  // ) => {
+  //   try {
+  //     // Mise à jour des paramètres de pagination.value selon les arguments passés
+  //     // Cette ligne fusionne les paramètres passés (params) avec les valeurs actuelles de pagination.value
+  //     // Cela permet de mettre à jour plusieurs paramètres de pagination en une seule fois
+  //     Object.assign(pagination.value, params);
 
-      // Construction de l'URL de requête en utilisant la chaîne de requête générée par pagination.value.queryString
-      const requestUrl = `categories?${pagination.value.queryString}`;
+  //     // Construction de l'URL de requête en utilisant la chaîne de requête générée par pagination.value.queryString
+  //     const requestUrl = `categories?${pagination.value.queryString}`;
 
-      // Envoi de la requête GET à l'API pour récupérer les catégories
-      const response = await CategoryService.getAll(requestUrl);
+  //     // Envoi de la requête GET à l'API pour récupérer les catégories
+  //     const response = await CategoryService.getAll(requestUrl);
 
-      // Affichage de l'URL de requête dans la console pour débogage
-      console.log(requestUrl);
-      console.log(response.data);
+  //     // Affichage de l'URL de requête dans la console pour débogage
+  //     console.log(requestUrl);
+  //     console.log(response.data);
 
-      // Mise à jour des éléments de pagination avec les données reçues de l'API
-      pagination.value.setItems(formatCategoryData(response.data));
+  //     // Mise à jour des éléments de pagination avec les données reçues de l'API
+  //     pagination.value.setItems(formatCategoryData(response.data));
 
-      // Mise à jour du nombre total d'éléments de pagination
-      // Si le nombre total d'éléments (data.meta?.count) est disponible, il est utilisé
-      // Sinon, la longueur des éléments actuels (pagination.value.items.length) est utilisée
-      pagination.value.setTotalItems(
-        response.data.meta?.total || pagination.value.items.length
-      );
-      console.log(response.data);
-      console.log(pagination.value);
-    } catch (error) {
-      // En cas d'erreur, capture et enregistrement de l'erreur dans l'état
-      setError(error);
+  //     // Mise à jour du nombre total d'éléments de pagination
+  //     // Si le nombre total d'éléments (data.meta?.count) est disponible, il est utilisé
+  //     // Sinon, la longueur des éléments actuels (pagination.value.items.length) est utilisée
+  //     pagination.value.setTotalItems(
+  //       response.data.meta?.total || pagination.value.items.length
+  //     );
+  //     console.log(response.data);
+  //     console.log(pagination.value);
+  //   } catch (error) {
+  //     // En cas d'erreur, capture et enregistrement de l'erreur dans l'état
+  //     setError(error);
 
-      // L'erreur est relancée pour être éventuellement gérée par le code appelant
-      throw error;
-    }
-  };
- 
+  //     // L'erreur est relancée pour être éventuellement gérée par le code appelant
+  //     throw error;
+  //   }
+  // };
+ const getAllCategories = async (
+  params: {
+    filters?: Record<string, string>;
+    sortField?: string;
+    sortOrder?: string;
+    itemsPerPage?: number;
+    currentPage?: number;
+    searchField?: string;
+    searchQuery?: string;
+  } = {}
+) => {
+  try {
+    Object.assign(pagination.value, params);
+
+    const requestUrl = `categories?${pagination.value.queryString}`;
+    const response = await CategoryService.getAll(requestUrl);
+
+    console.log("Hydra API response:", response.data);
+
+    // Les catégories sont dans response.data.member
+    pagination.value.setItems(formatCategoryData(response.data.member));
+
+    // Le total est dans response.data.totalItems
+    pagination.value.setTotalItems(
+      response.data.totalItems || response.data.member.length
+    );
+
+    console.log(pagination.value);
+  } catch (error) {
+    setError(error);
+    throw error;
+  }
+};
+
   
 
   return {
@@ -170,3 +203,4 @@ export const useCategoryStore = defineStore("category", () => {
     selectedCategory,
   };
 });
+
